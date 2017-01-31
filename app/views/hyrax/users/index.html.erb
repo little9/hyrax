@@ -1,32 +1,38 @@
-<div id="search">
-  <%= render 'search_form' %>
-  <h1><%= application_name %> Users</h1>
-</div>
+<% content_for :page_title, construct_page_title(t('hyrax.users.index.title'), t('hyku.admin.title')) %>
+    <% require 'byebug'; debugger; true %>
+<h1>
+  <%= t('hyrax.users.index.title') %>
+</h1>
 <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Avatar</th>
-            <th class="sorts"><i id="name" class="<%= params[:sort].blank? ? 'caret up' : params[:sort] == "name desc" ? 'caret' : params[:sort] == "name" ? 'caret up' : '' %>"></i> User Name</th>
-            <th class="sorts"><i id="login" class="<%= params[:sort] == "login desc" ? 'caret' : params[:sort] == "login" ? 'caret up' : '' %>"></i> User Id</th>
-            <th class="sorts"><i id="department" class="<%= params[:sort] == "department desc" ? 'caret' : params[:sort] == "department" ? 'caret up' : ''%>"></i> Department</th>
-            <th>Works Created</th>
-        </tr>
-    </thead>
-    <tbody>
-      <% @users.each do |user| %>
-        <tr>
-          <td><%= link_to hyrax.profile_path(user) do %>
-                <%= image_tag(user.avatar.url(:thumb), width: 30) if user.avatar.file %>
-              <% end %>
-          </td>
-           <td><%= link_to user.name, hyrax.profile_path(user) %></td>
-           <td><%= link_to user.user_key, hyrax.profile_path(user) %></td>
-           <td><%= user.department %></td>
-           <td><%= number_of_works(user) %></td>
-        </tr>
-      <% end %>
-    </tbody>
+  <tr>
+
+  </tr>
+  <tr>
+    <div id="search">
+      <%= render 'search_form' %>
+    </div>
+  </tr>
 </table>
-<div class="pager">
-  <%= paginate @users, theme: 'blacklight', route_set: hyrax %>
-</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th class="sorts"><i id="name" class="<%= params[:sort].blank? ? 'caret up' : params[:sort] == "name desc" ? 'caret' : params[:sort] == "name" ? 'caret up' : '' %>"></i><%= t('.id_label') %></th>
+      <th><%= t('.role_label') %></th>
+      <th><%= t('.access_label') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to hyrax.profile_path(user) do %>
+              <%= image_tag(user.avatar.url(:thumb), width: 30) if user.avatar.file %>
+            <% end %>
+        </td>
+        <td><%= link_to user.email, hyrax.profile_path(user) %></td>
+        <td></td>
+        <td><%= user.last_sign_in_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
