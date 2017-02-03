@@ -1,24 +1,76 @@
 module Hyrax
   class UsersPresenter
+
+    attr_reader :query, :authentication_key
+
+    def initialize(query:, authentication_key:)
+      @query = query
+      @authentication_key = authentication_key
+    end
+
     # @return [Array] an array of Users
     def users
-      @users = User.all
+      @users = search(query)
+      # @users = ::User.all
     end
 
     def user_count
       users.count
     end
 
-    def repository_administrator_count
-      count_admins = 0
+    def repository_admin_count
+      count_admin = 0
       users.each do |user|
-         count_admins +=1 if user.user_groups.include? 'admin'
+        count_admin +=1 if is_admin?(user)
       end
-      count_admins
+      count_admin
     end
 
-    def users_roles
-
+    def user_roles(user)
+      roles = user.groups
+      return roles if roles.any?
+      return ['']
     end
+
+    protected
+
+    def is_admin?(user)
+      user.groups.include? 'admin'
+    end
+
+    # Returns a list of users excluding the system users and guest_users
+    # @param query [String] the query string
+    def search(query)
+      clause = query.blank? ? nil : "%" + query.downcase + "%"
+      base = ::User.where(*base_query)
+      unless clause.blank?
+        base = base.where("#{authentication_key} like lower(?) OR display_name like lower(?)", clause, clause)
+      end
+      base.registered
+          .where("#{authentication_key} not in (?)",
+                 [::User.batch_user_key, ::User.audit_user_key])
+    end
+
+    # You can override base_query to return a list of arguments
+    def base_query
+      [nil]
+    end
+
+    # def sort_value
+    #   require 'byebug'; debugger; true
+    #   sort = sort_param.present? ? sort_param : "name"
+    #   case sort
+    #   when 'name'
+    #     'display_name'
+    #   when 'name desc'
+    #     'display_name DESC'
+    #   when 'login'
+    #     authentication_key
+    #   when 'login desc'
+    #     "#{authentication_key} DESC"
+    #   else
+    #     sort
+    #   end
+    # end
   end
 end

@@ -590,6 +590,9 @@ en:
         id_label:   "Username"
         role_label: "Roles"
         access_label: "Last access"
+        describe_users_singular_html: "There is <b>1 user</b> in this repository, including <b>%{nbr_admin} repository administrator."
+        describe_users_multiple_one_admin_html: "There are <b>%{nbr_users} users</b> in this repository, including <b>1 repository administrator.</b>"
+        describe_users_multiple_html: "There are <b>%{nbr_users} users</b> in this repository, including <b>%{nbr_admin} repository administrators.</b>"
     user_profile:
       orcid:
         alt: "ORCID icon"

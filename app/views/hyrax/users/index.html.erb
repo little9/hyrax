@@ -1,38 +1,49 @@
 <% content_for :page_title, construct_page_title(t('hyrax.users.index.title'), t('hyku.admin.title')) %>
-    <% require 'byebug'; debugger; true %>
-<h1>
-  <%= t('hyrax.users.index.title') %>
-</h1>
-<table class="table table-striped">
-  <tr>
 
-  </tr>
-  <tr>
-    <div id="search">
-      <%= render 'search_form' %>
-    </div>
-  </tr>
-</table>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <th class="sorts"><i id="name" class="<%= params[:sort].blank? ? 'caret up' : params[:sort] == "name desc" ? 'caret' : params[:sort] == "name" ? 'caret up' : '' %>"></i><%= t('.id_label') %></th>
-      <th><%= t('.role_label') %></th>
-      <th><%= t('.access_label') %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= link_to hyrax.profile_path(user) do %>
-              <%= image_tag(user.avatar.url(:thumb), width: 30) if user.avatar.file %>
-            <% end %>
-        </td>
-        <td><%= link_to user.email, hyrax.profile_path(user) %></td>
-        <td></td>
-        <td><%= user.last_sign_in_at %></td>
-      </tr>
+<% content_for :page_header do %>
+  <h1><span class="fa fa-user"></span> <%= t('hyrax.users.index.title') %></h1>
+<% end %>
+
+<div class="panel panel-default users-listing">
+  <div class="panel-heading">
+    <% user_count = @presenter.user_count %>
+    <% admin_count = @presenter.repository_admin_count %>
+    <% if user_count == 1 %>
+      <%= t('hyrax.users.index.describe_users_singular_html', nbr_admin: admin_count) %>
+    <% elsif admin_count == 1 %>
+      <%= t('hyrax.users.index.describe_users_multiple_one_admin_html', nbr_users: user_count) %>
+    <% else %>
+      <%= t('hyrax.users.index.describe_users_multiple_html', nbr_users: user_count, nbr_admin: admin_count) %>
     <% end %>
-  </tbody>
-</table>
+  </div>
+
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-striped datatable">
+        <thead>
+          <tr>
+            <th></th>
+            <th><%= t('.id_label') %></th>
+            <th><%= t('.role_label') %></th>
+            <th><%= t('.access_label') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @presenter.users.each do |user| %>
+            <tr>
+              <td><%= link_to hyrax.profile_path(user) do %>
+                    <%= image_tag(user.avatar.url(:thumb), width: 30) if user.avatar.file %>
+                  <% end %>
+              </td>
+              <td><%= link_to user.email, hyrax.profile_path(user) %></td>
+              <% @presenter.user_roles(user).each do |role| %>
+                <td><%= role %></td>
+              <% end %>
+              <td><%= time_ago_in_words(user.last_sign_in_at) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
