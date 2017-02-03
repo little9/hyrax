@@ -46,9 +46,7 @@ module Hyrax
       unless clause.blank?
         base = base.where("#{authentication_key} like lower(?) OR display_name like lower(?)", clause, clause)
       end
-      base.registered
-          .where("#{authentication_key} not in (?)",
-                 [::User.batch_user_key, ::User.audit_user_key])
+      base.registered.not_batch_or_audit_user
     end
 
     # You can override base_query to return a list of arguments
