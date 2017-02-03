@@ -11,11 +11,10 @@ module Hyrax
     # @return [Array] an array of Users
     def users
       @users = search(query)
-      # @users = ::User.all
     end
 
     def user_count
-      users.count
+      ::User.not_batch_or_audit_user.count
     end
 
     def repository_admin_count
@@ -53,22 +52,5 @@ module Hyrax
     def base_query
       [nil]
     end
-
-    # def sort_value
-    #   require 'byebug'; debugger; true
-    #   sort = sort_param.present? ? sort_param : "name"
-    #   case sort
-    #   when 'name'
-    #     'display_name'
-    #   when 'name desc'
-    #     'display_name DESC'
-    #   when 'login'
-    #     authentication_key
-    #   when 'login desc'
-    #     "#{authentication_key} DESC"
-    #   else
-    #     sort
-    #   end
-    # end
   end
 end

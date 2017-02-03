@@ -3,7 +3,7 @@ module Hyrax::UsersControllerBehavior
 
   included do
     include Blacklight::SearchContext
-    prepend_before_action :find_user, except: [:index, :search, :notifications_number]
+    prepend_before_action :find_user, except: [:index, :notifications_number]
     before_action :authenticate_user!, only: [:edit, :update]
     authorize_resource only: [:edit, :update]
     # Catch permission errors
@@ -75,42 +75,4 @@ module Hyrax::UsersControllerBehavior
   def deny_access(_exception)
     redirect_to hyrax.profile_path(@user.to_param), alert: "Permission denied: cannot access this page."
   end
-
-  # # TODO: this should move to a service.
-  # # Returns a list of users excluding the system users and guest_users
-  # # @param query [String] the query string
-  # def search(query)
-  #  clause = query.blank? ? nil : "%" + query.downcase + "%"
-  #  base = User.where(*base_query)
-  #  unless clause.blank?
-  #    base = base.where("#{Devise.authentication_keys.first} like lower(?) OR display_name like lower(?)", clause, clause)
-  #  end
-  #  base.registered
-  #      .where("#{Devise.authentication_keys.first} not in (?)",
-  #             [User.batch_user_key, User.audit_user_key])
-  #      .references(:trophies)
-  #      .order(sort_value)
-  #      .page(params[:page]).per(10)
-  # end
-  #
-  # # You can override base_query to return a list of arguments
-  # def base_query
-  #  [nil]
-  # end
-  #
-  # def sort_value
-  #   sort = params[:sort].blank? ? "name" : params[:sort]
-  #   case sort
-  #   when 'name'
-  #     'display_name'
-  #   when 'name desc'
-  #     'display_name DESC'
-  #   when 'login'
-  #     Devise.authentication_keys.first
-  #   when 'login desc'
-  #     "#{Devise.authentication_keys.first} DESC"
-  #   else
-  #     sort
-  #   end
-  # end
 end
