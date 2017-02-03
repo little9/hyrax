@@ -8,6 +8,7 @@ module Hyrax::UsersControllerBehavior
     authorize_resource only: [:edit, :update]
     # Catch permission errors
     rescue_from CanCan::AccessDenied, with: :deny_access
+
     helper Hyrax::TrophyHelper
   end
 
@@ -16,7 +17,7 @@ module Hyrax::UsersControllerBehavior
     add_breadcrumb t(:'hyrax.toolbar.admin.menu'), hyrax.admin_path
     add_breadcrumb t(:'hyrax.users.index.title'), main_app.admin_users_path
     @presenter = Hyrax::UsersPresenter.new(query: params[:uq],
-                                          authentication_key: Devise.authentication_keys.first)
+                                           authentication_key: Devise.authentication_keys.first)
   end
 
   # Display user profile
@@ -33,7 +34,7 @@ module Hyrax::UsersControllerBehavior
   def update
     if params[:user]
       @user.attributes = user_params
-      @user.populate_attributes if `update_directory?`
+      @user.populate_attributes if update_directory?
     end
 
     unless @user.save
@@ -62,17 +63,17 @@ module Hyrax::UsersControllerBehavior
 
   protected
 
-  def user_params
-    params.require(:user).permit(:avatar, :facebook_handle, :twitter_handle,
-                                 :googleplus_handle, :linkedin_handle, :remove_avatar, :orcid)
-  end
+    def user_params
+      params.require(:user).permit(:avatar, :facebook_handle, :twitter_handle,
+                                   :googleplus_handle, :linkedin_handle, :remove_avatar, :orcid)
+    end
 
-  def find_user
-    @user = User.from_url_component(params[:id])
-    redirect_to root_path, alert: "User '#{params[:id]}' does not exist" if @user.nil?
-  end
+    def find_user
+      @user = User.from_url_component(params[:id])
+      redirect_to root_path, alert: "User '#{params[:id]}' does not exist" if @user.nil?
+    end
 
-  def deny_access(_exception)
-    redirect_to hyrax.profile_path(@user.to_param), alert: "Permission denied: cannot access this page."
-  end
+    def deny_access(_exception)
+      redirect_to hyrax.profile_path(@user.to_param), alert: "Permission denied: cannot access this page."
+    end
 end
