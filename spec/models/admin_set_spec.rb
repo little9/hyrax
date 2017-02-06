@@ -77,15 +77,30 @@ RSpec.describe AdminSet, type: :model do
   end
 
   describe "#destroy" do
-    before do
-      subject.members = [gf1, gf2]
-      subject.save
-      subject.destroy
-    end
+    context "with member works" do
+      before do
+        subject.members = [gf1, gf2]
+        subject.save
+        subject.destroy
+      end
 
-    it "does not delete member files when deleted" do
-      expect(GenericWork.exists?(gf1.id)).to be true
-      expect(GenericWork.exists?(gf2.id)).to be true
+      it "does not delete adminset or member works" do
+        expect(subject.errors.full_messages).to eq ["Administrative set cannot be deleted as it is not empty"]
+        expect(AdminSet.exists?(subject.id)).to be true
+        expect(GenericWork.exists?(gf1.id)).to be true
+        expect(GenericWork.exists?(gf2.id)).to be true
+      end
+    end
+    context "with no member works" do
+      before do
+        subject.members = []
+        subject.save
+        subject.destroy
+      end
+
+      it "deletes the adminset" do
+        expect(AdminSet.exists?(subject.id)).to be false
+      end
     end
   end
 end

@@ -32,6 +32,7 @@ en:
     admin:
       admin_sets:
         delete:
+          error_not_empty: "Administrative set cannot be deleted as it is not empty"
           notification:   "Administrative set successfully deleted"
         edit:
           header:         "Edit Administrative Set"
