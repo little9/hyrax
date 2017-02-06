@@ -35,8 +35,15 @@ module Hyrax
       # Creates the default AdminSet and an associated PermissionTemplate with workflow
       def create_default_admin_set
         AdminSet.create!(id: DEFAULT_ID, title: ['Default Admin Set']).tap do |_as|
-          PermissionTemplate.create!(admin_set_id: DEFAULT_ID, workflow_name: 'default')
+          # PermissionTemplate.create!(admin_set_id: DEFAULT_ID, workflow_id: Sipity::Workflow.default_workflow.id)
+          PermissionTemplate.create!(admin_set_id: DEFAULT_ID, workflow_id: workflow.id)
         end
+      end
+
+      def workflow
+        @workflow ||= Sipity::Workflow.default_workflow ||
+                      (Hyrax::Workflow::WorkflowImporter.load_workflows &&
+                       Sipity::Workflow.default_workflow)
       end
   end
 end

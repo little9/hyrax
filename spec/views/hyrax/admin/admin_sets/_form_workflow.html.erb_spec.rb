@@ -18,6 +18,6 @@ RSpec.describe 'hyrax/admin/admin_sets/_form_workflow.html.erb', type: :view do
     render
   end
   it "has the radio button for workflow" do
-    expect(rendered).to have_selector('#workflow label[for="permission_template_workflow_name_my_name"] input[type=radio][name="permission_template[workflow_name]"][value="my_name"]')
+    expect(rendered).to have_selector('#workflow label[for="permission_template_workflow_id_1"] input[type=radio][name="permission_template[workflow_id]"][value="1"]')
   end
 end

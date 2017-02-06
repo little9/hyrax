@@ -5,7 +5,7 @@ module Hyrax
 
       self.model_class = PermissionTemplate
       self.terms = []
-      delegate :access_grants, :access_grants_attributes=, :release_date, :release_period, :visibility, :workflow_name, to: :model
+      delegate :access_grants, :access_grants_attributes=, :release_date, :release_period, :visibility, :workflow_id, to: :model
 
       # Stores which radio button under release "Varies" option is selected
       attr_accessor :release_varies
