@@ -18,7 +18,7 @@ module Hyrax
 
     def repository_admin_count
       count_admin = 0
-      users.each do |user|
+      ::User.not_batch_or_audit_user.each do |user|
         count_admin += 1 if admin?(user)
       end
       count_admin
@@ -42,7 +42,9 @@ module Hyrax
         clause = query.blank? ? nil : "%" + query.downcase + "%"
         base = ::User.where(*base_query)
         unless clause.blank?
-          base = base.where("#{authentication_key} like lower(?) OR display_name like lower(?)", clause, clause)
+          a = "#{authentication_key} like lower(?) OR display_name like lower(?)"
+          base = base.where(a, clause, clause)
+          # base = base.where("#{authentication_key} like lower(?) OR display_name like lower(?)", clause, clause)
         end
         base.registered.not_batch_or_audit_user
       end

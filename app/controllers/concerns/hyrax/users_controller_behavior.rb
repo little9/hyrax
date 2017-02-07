@@ -15,7 +15,7 @@ module Hyrax::UsersControllerBehavior
   def index
     add_breadcrumb t(:'hyrax.controls.home'), root_path
     add_breadcrumb t(:'hyrax.toolbar.admin.menu'), hyrax.admin_path
-    add_breadcrumb t(:'hyrax.users.index.title'), main_app.admin_users_path
+    add_breadcrumb t(:'hyrax.users.index.title'), request.path
     @presenter = Hyrax::UsersPresenter.new(query: params[:uq],
                                            authentication_key: Devise.authentication_keys.first)
   end
