@@ -150,7 +150,7 @@ RSpec.describe Hyrax::Forms::PermissionTemplateForm do
 
     let(:permission_template) do
       create(:permission_template,
-             workflow_name: workflow.name,
+             workflow_id: workflow.id,
              access_grants_attributes:
                [{ agent_type: 'user',
                   agent_id: user.user_key,

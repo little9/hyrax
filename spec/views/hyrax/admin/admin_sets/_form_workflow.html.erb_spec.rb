@@ -9,7 +9,7 @@ RSpec.describe 'hyrax/admin/admin_sets/_form_workflow.html.erb', type: :view do
                     persisted?: template.persisted?,
                     to_key: template.to_key,
                     workflows: [workflow],
-                    workflow_name: nil)
+                    workflow_id: workflow.id)
   end
   before do
     @form = instance_double(Hyrax::Forms::AdminSetForm,
