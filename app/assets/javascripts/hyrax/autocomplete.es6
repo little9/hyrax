@@ -8,7 +8,7 @@ export default class Autocomplete {
     // This is the initial setup for the form.
     setup() {
 	$('[data-autocomplete]').each((index, value) => {
-            let selector = $(value);
+            let selector = $(value).last();
 	    let autocompleteData = selector.data('autocomplete');
 	    this.activateFields(autocompleteData,selector);
 	});
@@ -17,7 +17,8 @@ export default class Autocomplete {
     fieldAdded(cloneElem) {
 	let selector = $(cloneElem);
 	let autocompleteData = selector.data('autocomplete');
-	this.activateFields(autocompleteData,selector);
+	this.autocomplete(selector);
+	console.log("adding a field..");
     }
     autocomplete(field) {
 	let fieldName = field.data('autocomplete');

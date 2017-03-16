@@ -50,11 +50,15 @@ Hyrax = {
 	    "autocompleteFields":
 	    ["subject","language","creator","based_near","work"]
 	});
+	
         $('.multi_value.form-group').manage_fields({
-          add: function(e, element) {
+            add: function(e, element) {
+		console.log(element);
+		
             autocomplete.fieldAdded(element)
           }
         });
+	
         autocomplete.setup();
     },
 
@@ -95,7 +99,6 @@ Hyrax = {
             new Notifications(url, interval);
         });
     },
-
     transfers: function () {
         $("#proxy_deposit_request_transfer_to").userSearch();
     },
