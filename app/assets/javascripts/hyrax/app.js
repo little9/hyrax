@@ -121,6 +121,12 @@ Hyrax = {
         new FileManager();
     },
 
+    authoritySelect: function(options) {
+	var AuthoritySelect = require('hyrax/authority_select');
+	var authoritySelect = new AuthoritySelect(options);
+	authoritySelect.initialize();
+    },
+
     // Saved so that inline javascript can put data somewhere.
     statistics: {}
 
