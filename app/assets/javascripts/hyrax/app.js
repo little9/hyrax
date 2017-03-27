@@ -14,6 +14,7 @@ Hyrax = {
         this.admin();
         this.adminStatisticsGraphs();
         this.tinyMCE();
+	this.example();
     },
 
     tinyMCE: function() {
@@ -119,6 +120,12 @@ Hyrax = {
 	authoritySelect.initialize();
     },
 
+    example: function() {
+	var Example = require('hyrax/example')
+	var example = new Example()
+	return example.text()
+    },
+    
     // Saved so that inline javascript can put data somewhere.
     statistics: {}
 
